@@ -8,13 +8,22 @@ function BookShelf(props) {
       <h2 className="bookshelf-title">{props.shelfCategory}</h2>
       <div className="bookshelf-books">
         <ol className="books-grid">
-          {props.categoryBooks.map((book) => (
-            <Book
-              key={book.id}
-              book={book}
-              updateShelves={(book, shelf) => props.updateShelves(book, shelf)}
-            />
-          ))}
+          {props.categoryBooks
+            .filter(
+              (book) =>
+                book.hasOwnProperty("imageLinks") &&
+                book.imageLinks.hasOwnProperty("smallThumbnail")
+            )
+            .map((book) => (
+              <Book
+                key={book.id}
+                book={book}
+                shelves={props.shelves ? props.shelves : {}}
+                updateShelves={(book, shelf) =>
+                  props.updateShelves(book, shelf)
+                }
+              />
+            ))}
         </ol>
       </div>
     </div>
@@ -24,6 +33,7 @@ function BookShelf(props) {
 BookShelf.propTypes = {
   shelfCategory: PropTypes.string.isRequired,
   categoryBooks: PropTypes.array.isRequired,
+  shelves: PropTypes.object,
 };
 
 export default BookShelf;
